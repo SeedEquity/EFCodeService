@@ -1,10 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Moq;
 
 namespace EFCodeService.Tests
 {
@@ -14,17 +11,56 @@ namespace EFCodeService.Tests
         [TestMethod]
         public void Test()
         {
-            EfDbContext context = new EfDbContext();
-            EFCodeService svc = new EFCodeService(context, 5);
-            for (int i = 0; i < 100; i++)
+            var mockDb = new Mock<EfDbContext>();
+
+            mockDb.Setup(s => s.Set(It
+                .IsAny<Type>()))
+                .Returns(It.IsAny<DbSet<EFCode>>);
+
+            mockDb.Setup(s => s.SaveChanges())
+                .Returns(0);
+            
+            var svc = new EFCodeService(mockDb.Object, 5);
+
+            for (var i = 0; i < 100; i++)
             {
                 var mycode = svc.GenerateCode();
+                if (ContainsThreeOrMoreConsecutiveLetters(mycode))
+                {
+                    Assert.Fail();
+                }
             }
+        }
+
+        private static bool ContainsThreeOrMoreConsecutiveLetters(string code)
+        {
+            var consecutiveLetters = 0;
+            foreach (var c in code)
+            {
+                if (consecutiveLetters >= 3)
+                {
+                    return true;
+                }
+                if (Char.IsLetter(c))
+                {
+                    consecutiveLetters++;
+                }
+                else
+                {
+                    consecutiveLetters = 0;
+                }
+            }
+            return false;
         }
     }
 
     public class EfDbContext : DbContext
     {
-        public DbSet<EFCode> Codes { get; set; }
+        public virtual IDbSet<EFCode> Codes { get; set; }
+
+        public new virtual IDbSet<EFCode> Set(Type t)
+        {
+            return Set<EFCode>();
+        } 
     }
 }

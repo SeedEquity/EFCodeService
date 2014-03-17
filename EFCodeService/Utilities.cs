@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace EFCodeService
 {
@@ -11,12 +7,33 @@ namespace EFCodeService
     {
         public static string GenerateRandomString(int size, Random random)
         {
-            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            const string numbers = "0123456789";
             var stringChars = new char[size];
 
-            for (int i = 0; i < stringChars.Length; i++)
+            var consecutiveLetters = 0;
+            for (var i = 0; i < stringChars.Length; i++)
             {
-                stringChars[i] = chars[random.Next(chars.Length)];
+                int index;
+                if (consecutiveLetters < 2)
+                {
+                    index = random.Next(chars.Length);
+                    stringChars[i] = chars[index];
+                    if (Char.IsLetter(chars[index]))
+                    {
+                        consecutiveLetters++;
+                    }
+                    else
+                    {
+                        consecutiveLetters = 0;
+                    }
+                }
+                else
+                {
+                    index = random.Next(numbers.Length);
+                    stringChars[i] = numbers[index];
+                    consecutiveLetters = 0;
+                }
             }
 
             return new String(stringChars);
@@ -31,7 +48,7 @@ namespace EFCodeService
 
         public static string GenerateSlug(this string phrase)
         {
-            string str = string.Empty;
+            string str;
             try
             {
                 str = phrase.RemoveAccent().ToLower();

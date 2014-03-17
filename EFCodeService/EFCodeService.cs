@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.Entity;
-using System.Text.RegularExpressions;
 using System.Diagnostics;
 
 namespace EFCodeService
@@ -13,8 +8,8 @@ namespace EFCodeService
     {
         internal const int MaxStringLength = 10;
         const int MAX_TRIES = 50;
-        DbContext _context;
-        int _codeLength;
+        readonly DbContext _context;
+        readonly int _codeLength;
         public EFCodeService(DbContext context, int codeLength)
         {
             _context = context;
