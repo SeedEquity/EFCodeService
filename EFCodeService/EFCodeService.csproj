@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CryptoRandom.cs" />
     <Compile Include="EFCode.cs" />
     <Compile Include="EFCodeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
