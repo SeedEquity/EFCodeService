@@ -9,7 +9,7 @@ namespace EFCodeService.Tests
     public class EFCodeServiceTests
     {
         [TestMethod]
-        public void Test()
+        public void EFCodeServiceTest()
         {
             var mockDb = new Mock<EfDbContext>();
 
