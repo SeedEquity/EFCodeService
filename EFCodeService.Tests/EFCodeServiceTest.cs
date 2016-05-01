@@ -30,6 +30,13 @@ namespace EFCodeService.Tests
                     Assert.Fail();
                 }
             }
+            var code = "";
+            var slug = "";
+            svc.Populate("Светлана" + " Савкина",
+                     c => code = c,
+                     s => slug = s);
+            Assert.IsNotNull(slug);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(slug));
         }
 
         private static bool ContainsThreeOrMoreConsecutiveLetters(string code)
