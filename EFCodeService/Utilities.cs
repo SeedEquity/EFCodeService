@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace EFCodeService
@@ -40,10 +42,15 @@ namespace EFCodeService
 
         }
 
-        public static string RemoveAccent(this string txt)
+        public static string RemoveControlCharacters(this string inString)
         {
-            byte[] bytes = System.Text.Encoding.GetEncoding("Cyrillic").GetBytes(txt);
-            return System.Text.Encoding.ASCII.GetString(bytes);
+            if (inString == null) return null;
+            var newString = new StringBuilder();
+            foreach (var ch in inString.Where(ch => !char.IsControl(ch)))
+            {
+                newString.Append(ch);
+            }
+            return newString.ToString();
         }
 
         public static string GenerateSlug(this string phrase)
@@ -51,9 +58,8 @@ namespace EFCodeService
             string str;
             try
             {
-                str = phrase.RemoveAccent().ToLower();
-                // invalid chars           
-                str = Regex.Replace(str, @"[^a-z0-9\s-]", "");
+                //invalid chars
+                str = phrase.RemoveControlCharacters().ToLower();
                 // convert multiple spaces into one space   
                 str = Regex.Replace(str, @"\s+", " ").Trim();
                 // cut and trim 
