@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace EFCodeService
 {
@@ -34,7 +35,7 @@ namespace EFCodeService
         {
             var dbset = _context.Set(typeof(EFCode));
 
-            Random random = new Random();
+            var random = new CryptoRandom();
             int counter = 0;
             while (true)
             {

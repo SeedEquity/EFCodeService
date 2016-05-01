@@ -7,7 +7,7 @@ namespace EFCodeService
 {
     public static class Utilities
     {
-        public static string GenerateRandomString(int size, Random random)
+        public static string GenerateRandomString(int size, CryptoRandom random)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             const string numbers = "0123456789";
