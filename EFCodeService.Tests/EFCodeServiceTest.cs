@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.IO;
+using System.Linq;
+using System.Runtime;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data.Entity;
 using Moq;
@@ -37,6 +40,18 @@ namespace EFCodeService.Tests
                      s => slug = s);
             Assert.IsNotNull(slug);
             Assert.IsFalse(string.IsNullOrWhiteSpace(slug));
+            Assert.AreEqual("светлана-савкина", slug);
+
+            svc.Populate("aaron mottern | tech entrepreneur",
+                c => code = c,
+                s => slug = s);
+            Assert.IsNotNull(slug);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(slug));
+            foreach (var c in Path.GetInvalidPathChars())
+            {
+                Assert.IsFalse(slug.ToCharArray().Contains(c));
+            }
+            Assert.AreEqual("aaron-mottern-tech-entrepreneur", slug);
         }
 
         private static bool ContainsThreeOrMoreConsecutiveLetters(string code)

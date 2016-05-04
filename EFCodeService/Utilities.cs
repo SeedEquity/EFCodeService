@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -46,7 +47,7 @@ namespace EFCodeService
         {
             if (inString == null) return null;
             var newString = new StringBuilder();
-            foreach (var ch in inString.Where(ch => !char.IsControl(ch)))
+            foreach (var ch in inString.Where(ch => !char.IsControl(ch) && !Path.GetInvalidPathChars().Contains(ch)))
             {
                 newString.Append(ch);
             }
